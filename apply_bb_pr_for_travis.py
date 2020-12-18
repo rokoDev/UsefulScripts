@@ -9,7 +9,8 @@ import sys
 def run(*args):
   command = ['git'] + list(args)
   try:
-    subprocess.run(command, check=True)
+    result = subprocess.run(command, check=True, text=True, capture_output=True)
+    return result.stdout
   except subprocess.CalledProcessError as e:
     s = " "
     print(f"Command [{s.join(command)}] exit with code {e.returncode}")
