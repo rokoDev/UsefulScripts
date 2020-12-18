@@ -4,12 +4,16 @@ import requests
 import os
 import subprocess
 import argparse
+import sys
 
 def run(*args):
+  command = ['git'] + list(args)
   try:
-    return subprocess.run(['git'] + list(args), capture_output=True, text=True).stdout
-  except subprocess.CalledProcessError:
-    return None
+    subprocess.run(command, check=True)
+  except subprocess.CalledProcessError as e:
+    s = " "
+    print(f"Command [{s.join(command)}] exit with code {e.returncode}")
+    sys.exit(e.returncode)
 
 def get_current_branch_name():
   return run("rev-parse", "--abbrev-ref", "HEAD").rstrip('\r\n')
@@ -45,7 +49,6 @@ def get_source_and_target_branch_names(session, slug, pr_number):
   else:
     error_code = response.status_code
     sys.exit(f"Fail to retrive pull request info: {error_code}")
-    return "", ""
 
 def main():
   parser = argparse.ArgumentParser(description="""
