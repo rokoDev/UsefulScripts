@@ -22,6 +22,15 @@ def get_current_branch_name():
 def submodule_update_init_recursive():
   return run("submodule", "update", "--init", "--recursive")
 
+# we assume that every submodule tracking "master" branch.
+# If that is not true additional workaround needed to determine submodule branch name.
+def checkout_all_submodules():
+  run("submodule", "foreach", "--recursive", "git", "checkout", "master")
+
+def update_all_submodules():
+  submodule_update_init_recursive()
+  checkout_all_submodules()
+
 def switch_to_branch(branch_name):
   CURRENT_BRANCH = get_current_branch_name()
   if CURRENT_BRANCH == branch_name:
@@ -29,7 +38,7 @@ def switch_to_branch(branch_name):
   else:
     print(f"switch branch from <{CURRENT_BRANCH}> to <{branch_name}>")
     run("checkout", "--recurse-submodules", branch_name)
-    submodule_update_init_recursive()
+    update_all_submodules()
 
 def create_and_checkout_branch(branch_name):
   print(f"create and checkout branch <{branch_name}>")
@@ -89,7 +98,7 @@ def main():
 
   merge_branch_to_current(PR_SOURCE_BRANCH)
 
-  submodule_update_init_recursive()
+  update_all_submodules()
 
 if __name__ == "__main__":
   main()
