@@ -73,7 +73,7 @@ def main():
     2. Create new branch from destination branch.
     3. Merge source branch to destination branch.
   """)
-  parser.add_argument("-CLONE_URL", default='https://github.com/rokoDev/ndt.git', help="URL which can be used in command:$ git clone URL")
+  parser.add_argument("-CLONE_URL", default='https://github.com/', help="URL which can be used in command:$ git clone URL")
   parser.add_argument("-OWNER_NAME", default=os.environ['CIRCLE_PROJECT_USERNAME'], help="Repository owner name.")
   parser.add_argument("-REPO_NAME", default=os.environ['CIRCLE_PROJECT_REPONAME'], help="Repository name.")
   parser.add_argument("-PR_URL", default=os.environ['CIRCLE_PULL_REQUEST'], help="Pull request url.")
@@ -84,7 +84,7 @@ def main():
 
   REPO_NAME = args.REPO_NAME
   OWNER_NAME = args.OWNER_NAME
-  CLONE_URL = args.CLONE_URL + '/' + OWNER_NAME + '/' + REPO_NAME + '.git'
+  CLONE_URL = args.CLONE_URL + OWNER_NAME + '/' + REPO_NAME + '.git'
   PR_NUMBER = os.path.basename(args.PR_URL)
   CI_WORK_PATH = args.CI_WORK_PATH
   BRANCH = args.BRANCH
