@@ -117,7 +117,9 @@ def main():
       os.chdir(PROJECT_ROOT_PATH)
       switch_to_branch(BRANCH)
 
-  os.environ['PROJECT_ROOT_PATH'] = PROJECT_ROOT_PATH
+  envPath = os.path.abspath(os.path.joint(os.path.dirname(__file__), ".env"))
+  with open(envPath, "w") as file:
+    file.write(f"PROJECT_ROOT_PATH={PROJECT_ROOT_PATH}")
 
 if __name__ == "__main__":
   main()
