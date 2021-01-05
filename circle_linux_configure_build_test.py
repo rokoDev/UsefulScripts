@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
 
-# supposed examples to call:
-# python3 ./scripts/build_test_macos_travisci.py -g Xcode -source_dir $TRAVIS_BUILD_DIR -build_dir $TRAVIS_BUILD_DIR/build/Xcode --build_type Debug
-# python3 ./scripts/build_test_macos_travisci.py -g Xcode -source_dir $TRAVIS_BUILD_DIR -build_dir $TRAVIS_BUILD_DIR/build/Xcode --build_type Release -notclear
-# python3 ./scripts/build_test_macos_travisci.py -g Ninja -source_dir $TRAVIS_BUILD_DIR -build_dir $TRAVIS_BUILD_DIR/build/Ninja/Debug --build_type Debug
-# python3 ./scripts/build_test_macos_travisci.py -g Ninja -source_dir $TRAVIS_BUILD_DIR -build_dir $TRAVIS_BUILD_DIR/build/Ninja/Release --build_type Release
-
 import os
 import subprocess
 import argparse
@@ -80,23 +74,20 @@ def main():
     3. Run CMake to build project.
     4. Run CTest to execute unit tests.
   """)
-  parser.add_argument('--is_shared_libs', '-shared', action='store_true', help='If specified - build shared library and static otherwise.')
-  parser.add_argument('--not_clear_build_dir', '-notclear', action='store_true', help='If specified - BUILD_DIR will not be cleared before cmake call')
+  parser.add_argument('--is_shared_libs', '-s', action='store_true', help='If specified - build shared library and static otherwise.')
+  parser.add_argument('--not_clear_build_dir', '-nc', action='store_true', help='If specified - BUILD_DIR will not be cleared before cmake call')
   parser.add_argument('--build_type', default='Debug', choices=['Debug', 'Release'], help='Build type.')
-  parser.add_argument('-g', default='Ninja', choices=['Xcode', 'Ninja'], help='CMake generator type.')
-  parser.add_argument('-build_dir', default='./build', help='Relative or full path to build directory.')
-  parser.add_argument('-source_dir', default='./', help='Relative or full path to directory with root CMakeLists.txt file.')
+  parser.add_argument('-source_dir', default=os.environ['PROJECT_ROOT_PATH'], help='Relative or full path to directory with root CMakeLists.txt file.')
 
   args = parser.parse_args()
 
   IS_SHARED_LIBS = args.is_shared_libs
   NOT_CLEAR_BUILD_DIR = args.not_clear_build_dir
   BUILD_TYPE = args.build_type
-  CMAKE_GENERATOR = args.g
-  BUILD_DIR = os.path.abspath(args.build_dir)
   SOURCE_DIR = os.path.abspath(args.source_dir)
 
-  cmake_configure_build_test(IS_SHARED_LIBS, NOT_CLEAR_BUILD_DIR, BUILD_TYPE, CMAKE_GENERATOR, BUILD_DIR, SOURCE_DIR)
+  BUILD_DIR = os.path.join(SOURCE_DIR, 'build', 'Ninja', BUILD_TYPE)
+  cmake_configure_build_test(IS_SHARED_LIBS, NOT_CLEAR_BUILD_DIR, BUILD_TYPE, 'Ninja', BUILD_DIR, SOURCE_DIR)
 
 if __name__ == "__main__":
   main()

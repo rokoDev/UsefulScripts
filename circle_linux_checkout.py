@@ -5,7 +5,6 @@ import os
 import subprocess
 import argparse
 import sys
-from circle_linux_configure_build_test import cmake_configure_build_test
 
 def run(*args):
   command = ['git'] + list(args)
@@ -110,7 +109,6 @@ def main():
       clone_repo(CLONE_URL)
       print(f"current dir: {os.getcwd()}")
       os.chdir(PROJECT_ROOT_PATH)
-      #switch_to_branch("master")
       pr_branch_name = checkout_pr(PR_NUMBER)
       switch_to_branch(pr_branch_name)
     else:
@@ -118,13 +116,7 @@ def main():
       os.chdir(PROJECT_ROOT_PATH)
       switch_to_branch(BRANCH)
 
-  NOT_CLEAR_BUILD_DIR = False
-
-  BUILD_DIR = os.path.join(PROJECT_ROOT_PATH, 'build', 'Ninja', 'Debug')
-  cmake_configure_build_test(False, NOT_CLEAR_BUILD_DIR, 'Debug', 'Ninja', BUILD_DIR, PROJECT_ROOT_PATH)
-
-  BUILD_DIR = os.path.join(PROJECT_ROOT_PATH, 'build', 'Ninja', 'Release')
-  cmake_configure_build_test(False, NOT_CLEAR_BUILD_DIR, 'Release', 'Ninja', BUILD_DIR, PROJECT_ROOT_PATH)
+  os.environ['PROJECT_ROOT_PATH'] = PROJECT_ROOT_PATH
 
 if __name__ == "__main__":
   main()
