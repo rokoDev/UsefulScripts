@@ -6,7 +6,6 @@ import subprocess
 import argparse
 import sys
 from circle_linux_configure_build_test import cmake_configure_build_test
-from pathlib import Path
 
 def run(*args):
   command = ['git'] + list(args)
@@ -100,6 +99,7 @@ def main():
     path = os.path.join(CI_WORK_PATH, OWNER_NAME, REPO_NAME, f"pr{PR_NUMBER}")
   else:
     path = os.path.join(CI_WORK_PATH, OWNER_NAME, REPO_NAME, BRANCH)
+  path = os.path.abspath(path)
   print(f"path:<{path}>")
   os.makedirs(path, exist_ok=True)
 
@@ -109,9 +109,6 @@ def main():
     if PR_NUMBER.isdigit():
       clone_repo(CLONE_URL)
       print(f"current dir: {os.getcwd()}")
-      dirs = [e for e in path.iterdir() if e.is_dir()]
-      for dir in dirs:
-        print(dir)
       os.chdir(PROJECT_ROOT_PATH)
       #switch_to_branch("master")
       pr_branch_name = checkout_pr(PR_NUMBER)
