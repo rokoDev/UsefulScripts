@@ -86,7 +86,7 @@ def main():
   OWNER_NAME = args.OWNER_NAME
   CLONE_URL = args.CLONE_URL + OWNER_NAME + '/' + REPO_NAME + '.git'
   PR_NUMBER = os.path.basename(args.PR_URL)
-  CI_WORK_PATH = args.CI_WORK_PATH
+  CI_WORK_PATH = os.path.expanduser(args.CI_WORK_PATH)
   BRANCH = args.BRANCH
 
   print(f"CLONE_URL:<{CLONE_URL}>")
@@ -116,8 +116,10 @@ def main():
       clone_branch(CLONE_URL, BRANCH)
       os.chdir(PROJECT_ROOT_PATH)
       switch_to_branch(BRANCH)
-
-  envPath = os.path.abspath(os.path.joint(os.path.dirname(__file__), ".env"))
+  
+  curPyFilePath = os.path.dirname(__file__)
+  print(f"curPyFilePath: {curPyFilePath}")
+  envPath = os.path.abspath(os.path.joint(curPyFilePath, ".env"))
   print(f"envPath: {envPath}")
   with open(envPath, "w") as file:
     file.write(f"PROJECT_ROOT_PATH={PROJECT_ROOT_PATH}")
