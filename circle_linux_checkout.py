@@ -5,6 +5,7 @@ import os
 import subprocess
 import argparse
 import sys
+from decouple import config
 
 def run(*args):
   command = ['git'] + list(args)

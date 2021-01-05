@@ -5,6 +5,7 @@ import subprocess
 import argparse
 import shutil
 import sys
+from decouple import config
 
 def print_command(command):
   separator = ' '
@@ -77,7 +78,7 @@ def main():
   parser.add_argument('--is_shared_libs', '-s', action='store_true', help='If specified - build shared library and static otherwise.')
   parser.add_argument('--not_clear_build_dir', '-nc', action='store_true', help='If specified - BUILD_DIR will not be cleared before cmake call')
   parser.add_argument('--build_type', default='Debug', choices=['Debug', 'Release'], help='Build type.')
-  parser.add_argument('-source_dir', default=os.environ['PROJECT_ROOT_PATH'], help='Relative or full path to directory with root CMakeLists.txt file.')
+  parser.add_argument('-source_dir', default=config('PROJECT_ROOT_PATH'), help='Relative or full path to directory with root CMakeLists.txt file.')
 
   args = parser.parse_args()
 
