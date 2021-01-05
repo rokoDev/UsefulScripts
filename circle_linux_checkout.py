@@ -119,7 +119,7 @@ def main():
   
   curPyFilePath = os.path.dirname(__file__)
   print(f"curPyFilePath: {curPyFilePath}")
-  envPath = os.path.abspath(os.path.joint(curPyFilePath, ".env"))
+  envPath = os.path.abspath(os.path.join(curPyFilePath, ".env"))
   print(f"envPath: {envPath}")
   with open(envPath, "w") as file:
     file.write(f"PROJECT_ROOT_PATH={PROJECT_ROOT_PATH}")
