@@ -117,12 +117,7 @@ def main():
       os.chdir(PROJECT_ROOT_PATH)
       switch_to_branch(BRANCH)
   
-  curPyFilePath = os.path.dirname(__file__)
-  print(f"curPyFilePath: {curPyFilePath}")
-  absPath = os.path.abspath(curPyFilePath)
-  print(f"absPath: {absPath}")
-  os.path.join(absPath, ".env")
-  envPath = os.path.abspath()
+  envPath = os.path.join(CI_WORK_PATH, "..", "UsefulScripts", ".env")
   print(f"envPath: {envPath}")
   with open(envPath, "w") as file:
     file.write(f"PROJECT_ROOT_PATH={PROJECT_ROOT_PATH}")
